@@ -42,6 +42,24 @@ resource lb 'Microsoft.Network/loadBalancers@2021-02-01' = {
   }
 }
 
+resource webNic 'Microsoft.Network/networkInterfaces@2021-02-01' = [for i in range(3): {
+  name: 'web-nic-${i}'
+  location: resourceGroup().location
+  properties: {
+    ipConfigurations: [
+      {
+        name: 'ipconfig1'
+        properties: {
+          privateIPAllocationMethod: 'Dynamic'
+          subnet: {
+            id: resourceId('Microsoft.Network/virtualNetworks/subnets', 'primary-region-vnet', 'web-subnet')
+          }
+        }
+      }
+    ]
+  }
+}]
+
 resource webVms 'Microsoft.Compute/virtualMachines@2021-07-01' = [for i in range(3): {
   name: 'web-vm-${i}'
   location: resourceGroup().location
@@ -62,7 +80,7 @@ resource webVms 'Microsoft.Compute/virtualMachines@2021-07-01' = [for i in range
     networkProfile: {
       networkInterfaces: [
         {
-          id: resourceId('Microsoft.Network/networkInterfaces', 'web-nic-${i}') // Corrected resourceId usage
+          id: webNic[i].id // Symbolic reference for the network interface
         }
       ]
     }
