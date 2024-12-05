@@ -1,3 +1,6 @@
+param adminUsername string
+param adminPassword string
+
 resource availabilitySet 'Microsoft.Compute/availabilitySets@2021-07-01' = {
   name: 'web-tier-availability-set'
   location: resourceGroup().location
@@ -34,23 +37,6 @@ resource lb 'Microsoft.Network/loadBalancers@2021-02-01' = {
         name: 'backend-pool'
       }
     ]
-    loadBalancingRules: [
-      {
-        name: 'http-rule'
-        properties: {
-          frontendIPConfiguration: {
-            id: lb.properties.frontendIPConfigurations[0].id
-          }
-          backendAddressPool: {
-            id: lb.properties.backendAddressPools[0].id
-          }
-          protocol: 'Tcp'
-          frontendPort: 80
-          backendPort: 80
-          enableFloatingIP: false
-        }
-      }
-    ]
   }
 }
 
@@ -63,8 +49,8 @@ resource webVms 'Microsoft.Compute/virtualMachines@2021-07-01' = [for i in range
     }
     osProfile: {
       computerName: 'web-vm-${i}'
-      adminUsername: 'azureuser'
-      adminPassword: 'P@ssw0rd123!'
+      adminUsername: adminUsername
+      adminPassword: adminPassword
     }
     storageProfile: {
       osDisk: {
