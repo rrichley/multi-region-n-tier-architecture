@@ -18,6 +18,12 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+    - name: Create Resource Groups
+      run: |
+        az group create --name primary-region-rg --location ukwest
+        az group create --name secondary-region-rg --location uksouth
+        az group create --name global-rg --location eastus
+
     - name: Deploy Primary Region Resources
       run: |
         az deployment group create --resource-group primary-region-rg --template-file bicep/primary-region/networking.bicep
