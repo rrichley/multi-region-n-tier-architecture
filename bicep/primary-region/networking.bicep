@@ -10,6 +10,9 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
         name: 'web-subnet' // Subnet for the web tier
         properties: {
           addressPrefix: '10.0.1.0/24' // CIDR block for the web subnet
+          networkSecurityGroup: {
+            id: nsg.id
+          }
         }
       }
       {
@@ -60,13 +63,5 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
         }
       }
     ]
-  }
-}
-
-resource vnetNSGAssociation 'Microsoft.Network/virtualNetworks/subnets/networkSecurityGroup@2021-05-01' = {
-  name: 'web-subnet-nsg-association'
-  parent: vnet.subnets[0] // Reference to the web-subnet
-  properties: {
-    id: nsg.id
   }
 }
