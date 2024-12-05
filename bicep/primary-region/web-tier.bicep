@@ -1,5 +1,7 @@
-param adminUsername string
+@secure()
 param adminPassword string
+
+param adminUsername string
 
 resource availabilitySet 'Microsoft.Compute/availabilitySets@2021-07-01' = {
   name: 'web-tier-availability-set'
@@ -60,7 +62,7 @@ resource webVms 'Microsoft.Compute/virtualMachines@2021-07-01' = [for i in range
     networkProfile: {
       networkInterfaces: [
         {
-          id: '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.Network/networkInterfaces/web-nic-${i}'
+          id: resourceId('Microsoft.Network/networkInterfaces', 'web-nic-${i}')
         }
       ]
     }
