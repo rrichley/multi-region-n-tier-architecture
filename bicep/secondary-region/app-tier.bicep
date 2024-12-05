@@ -1,3 +1,6 @@
+param adminUsername string
+param adminPassword string
+
 resource appLb 'Microsoft.Network/loadBalancers@2021-02-01' = {
   name: 'app-tier-load-balancer-secondary'
   location: resourceGroup().location
@@ -18,23 +21,6 @@ resource appLb 'Microsoft.Network/loadBalancers@2021-02-01' = {
         name: 'backend-pool'
       }
     ]
-    loadBalancingRules: [
-      {
-        name: 'app-http-rule'
-        properties: {
-          frontendIPConfiguration: {
-            id: appLb.properties.frontendIPConfigurations[0].id
-          }
-          backendAddressPool: {
-            id: appLb.properties.backendAddressPools[0].id
-          }
-          protocol: 'Tcp'
-          frontendPort: 8080
-          backendPort: 8080
-          enableFloatingIP: false
-        }
-      }
-    ]
   }
 }
 
@@ -50,14 +36,14 @@ resource appVmss 'Microsoft.Compute/virtualMachineScaleSets@2021-07-01' = {
       mode: 'Automatic'
     }
     virtualMachineProfile: {
+      osProfile: {
+        adminUsername: adminUsername
+        adminPassword: adminPassword
+      }
       storageProfile: {
         osDisk: {
           createOption: 'FromImage'
         }
-      }
-      osProfile: {
-        adminUsername: 'azureuser'
-        adminPassword: 'P@ssw0rd123!'
       }
       networkProfile: {
         networkInterfaceConfigurations: [
