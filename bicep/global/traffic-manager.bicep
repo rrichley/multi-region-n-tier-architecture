@@ -17,7 +17,7 @@ resource trafficManager 'Microsoft.Network/trafficManagerProfiles@2020-11-01' = 
         name: 'primary-region-endpoint'
         type: 'Microsoft.Network/trafficManagerProfiles/externalEndpoints'
         properties: {
-          target: 'PRIMARY_PUBLIC_IP_PLACEHOLDER' // Replace after deployment
+          target: 'PRIMARY_PUBLIC_IP_PLACEHOLDER' // Replace with the primary region's public IP after deployment
           endpointStatus: 'Enabled'
           priority: 1
         }
@@ -26,7 +26,7 @@ resource trafficManager 'Microsoft.Network/trafficManagerProfiles@2020-11-01' = 
         name: 'secondary-region-endpoint'
         type: 'Microsoft.Network/trafficManagerProfiles/externalEndpoints'
         properties: {
-          target: 'SECONDARY_PUBLIC_IP_PLACEHOLDER' // Replace after deployment
+          target: 'SECONDARY_PUBLIC_IP_PLACEHOLDER' // Replace with the secondary region's public IP after deployment
           endpointStatus: 'Enabled'
           priority: 2
         }
