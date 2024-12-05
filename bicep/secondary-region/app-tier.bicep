@@ -62,7 +62,7 @@ resource appVmss 'Microsoft.Compute/virtualMachineScaleSets@2021-07-01' = {
       networkProfile: {
         networkInterfaceConfigurations: [
           {
-            name: 'app-tier-nic-secondary'
+            name: 'app-tier-nic'
             properties: {
               primary: true
               ipConfigurations: [
