@@ -1,37 +1,35 @@
-// Define the Virtual Network
 resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: 'primary-region-vnet'
   location: resourceGroup().location
   properties: {
     addressSpace: {
       addressPrefixes: [
-        '10.0.0.0/16' // Address space for the entire VNet
+        '10.0.0.0/16' // Address space for the virtual network
       ]
     }
     subnets: [
       {
-        name: 'web-subnet' // Subnet for the web tier
+        name: 'web-subnet' // Subnet for web tier
         properties: {
-          addressPrefix: '10.0.1.0/24' // Ensure a valid CIDR block
+          addressPrefix: '10.0.1.0/24' // Ensure this value is valid and within the address space
         }
       }
       {
-        name: 'app-subnet' // Subnet for the application tier
+        name: 'app-subnet' // Subnet for application tier
         properties: {
-          addressPrefix: '10.0.2.0/24' // Ensure a valid CIDR block
+          addressPrefix: '10.0.2.0/24' // Ensure this value is valid and within the address space
         }
       }
       {
-        name: 'db-subnet' // Subnet for the database tier
+        name: 'db-subnet' // Subnet for database tier
         properties: {
-          addressPrefix: '10.0.3.0/24' // Ensure a valid CIDR block
+          addressPrefix: '10.0.3.0/24' // Ensure this value is valid and within the address space
         }
       }
     ]
   }
 }
 
-// Define the Network Security Group
 resource nsg 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
   name: 'primary-region-nsg'
   location: resourceGroup().location
@@ -67,7 +65,7 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
   }
 }
 
-// Associate the NSG with the Web Subnet
+// Associate NSG with web-subnet
 resource nsgAssoc 'Microsoft.Network/virtualNetworks/subnets@2021-05-01' = {
   name: 'web-subnet'
   parent: vnet
