@@ -9,19 +9,19 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
     }
     subnets: [
       {
-        name: 'web-subnet'
+        name: 'web-subnet' // Subnet for the web tier
         properties: {
           addressPrefix: '10.0.1.0/24' // CIDR block for the web subnet
         }
       }
       {
-        name: 'app-subnet'
+        name: 'app-subnet' // Subnet for the application tier
         properties: {
           addressPrefix: '10.0.2.0/24' // CIDR block for the application subnet
         }
       }
       {
-        name: 'db-subnet'
+        name: 'db-subnet' // Subnet for the database tier
         properties: {
           addressPrefix: '10.0.3.0/24' // CIDR block for the database subnet
         }
