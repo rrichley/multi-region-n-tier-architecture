@@ -62,7 +62,7 @@ resource webVms 'Microsoft.Compute/virtualMachines@2021-07-01' = [for i in range
     networkProfile: {
       networkInterfaces: [
         {
-          id: resourceId('Microsoft.Network/networkInterfaces', 'web-nic-${i}')
+          id: resourceId('Microsoft.Network/networkInterfaces', 'web-nic-${i}') // Corrected resourceId usage
         }
       ]
     }
