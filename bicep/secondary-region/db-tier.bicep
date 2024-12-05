@@ -1,9 +1,12 @@
+param adminUsername string
+param adminPassword string
+
 resource sqlServer 'Microsoft.Sql/servers@2021-02-01-preview' = {
   name: 'secondary-region-sql-server'
   location: resourceGroup().location
   properties: {
-    administratorLogin: 'sqladmin'
-    administratorLoginPassword: 'P@ssw0rd123!'
+    administratorLogin: adminUsername
+    administratorLoginPassword: adminPassword
   }
 }
 
