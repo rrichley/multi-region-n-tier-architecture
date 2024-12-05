@@ -1,0 +1,38 @@
+name: Deploy Multi-Region Architecture
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy Primary Region Resources
+      run: |
+        az deployment group create --resource-group primary-region-rg --template-file bicep/primary-region/networking.bicep
+        az deployment group create --resource-group primary-region-rg --template-file bicep/primary-region/web-tier.bicep
+        az deployment group create --resource-group primary-region-rg --template-file bicep/primary-region/app-tier.bicep
+        az deployment group create --resource-group primary-region-rg --template-file bicep/primary-region/db-tier.bicep
+
+    - name: Deploy Secondary Region Resources
+      run: |
+        az deployment group create --resource-group secondary-region-rg --template-file bicep/secondary-region/networking.bicep
+        az deployment group create --resource-group secondary-region-rg --template-file bicep/secondary-region/web-tier.bicep
+        az deployment group create --resource-group secondary-region-rg --template-file bicep/secondary-region/app-tier.bicep
+        az deployment group create --resource-group secondary-region-rg --template-file bicep/secondary-region/db-tier.bicep
+
+    - name: Deploy Global Resources
+      run: |
+        az deployment group create --resource-group global-rg --template-file bicep/global/traffic-manager.bicep
+        az deployment group create --resource-group global-rg --template-file bicep/global/vnet-peering.bicep
