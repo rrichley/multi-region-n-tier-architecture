@@ -52,7 +52,7 @@ resource webNic 'Microsoft.Network/networkInterfaces@2021-02-01' = [for i in ran
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets', 'primary-region-vnet', 'web-subnet')
+            id: resourceId('Microsoft.Network/virtualNetworks/subnets', 'primary-region-vnet', 'web-subnet') // Fixed resourceId
           }
         }
       }
@@ -80,7 +80,7 @@ resource webVms 'Microsoft.Compute/virtualMachines@2021-07-01' = [for i in range
     networkProfile: {
       networkInterfaces: [
         {
-          id: webNic[i].id // Symbolic reference for the network interface
+          id: resourceId('Microsoft.Network/networkInterfaces', 'web-nic-${i}') // Fixed resourceId
         }
       ]
     }
