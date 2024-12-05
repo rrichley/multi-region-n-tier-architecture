@@ -54,7 +54,6 @@ resource lb 'Microsoft.Network/loadBalancers@2021-02-01' = {
   }
 }
 
-// Define web VMs in the availability set
 resource webVms 'Microsoft.Compute/virtualMachines@2021-07-01' = [for i in range(3): {
   name: 'web-vm-secondary-${i}'
   location: resourceGroup().location
