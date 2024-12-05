@@ -3,26 +3,25 @@ resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   location: resourceGroup().location
   properties: {
     addressSpace: {
-      addressPrefixes: ['10.0.0.0/16'] // CIDR block for the virtual network
+      addressPrefixes: [
+        '10.0.0.0/16' // CIDR block for the entire virtual network
+      ]
     }
     subnets: [
       {
-        name: 'web-subnet' // Subnet for the web tier
+        name: 'web-subnet'
         properties: {
           addressPrefix: '10.0.1.0/24' // CIDR block for the web subnet
-          networkSecurityGroup: {
-            id: nsg.id
-          }
         }
       }
       {
-        name: 'app-subnet' // Subnet for the application tier
+        name: 'app-subnet'
         properties: {
-          addressPrefix: '10.0.2.0/24' // CIDR block for the app subnet
+          addressPrefix: '10.0.2.0/24' // CIDR block for the application subnet
         }
       }
       {
-        name: 'db-subnet' // Subnet for the database tier
+        name: 'db-subnet'
         properties: {
           addressPrefix: '10.0.3.0/24' // CIDR block for the database subnet
         }
@@ -63,5 +62,16 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
         }
       }
     ]
+  }
+}
+
+// Attach NSG to web-subnet
+resource nsgAssociation 'Microsoft.Network/virtualNetworks/subnets@2021-05-01' = {
+  name: 'web-subnet'
+  parent: vnet
+  properties: {
+    networkSecurityGroup: {
+      id: nsg.id
+    }
   }
 }
