@@ -52,7 +52,7 @@ resource webNic 'Microsoft.Network/networkInterfaces@2021-02-01' = [for i in ran
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets', 'primary-region-vnet', 'web-subnet') // Fixed for Line 45
+            id: resourceId('Microsoft.Network/virtualNetworks/subnets', 'primary-region-vnet', 'web-subnet') // Fixed Line 45
           }
         }
       }
@@ -63,6 +63,7 @@ resource webNic 'Microsoft.Network/networkInterfaces@2021-02-01' = [for i in ran
 resource webVms 'Microsoft.Compute/virtualMachines@2021-07-01' = [for i in range(3): {
   name: 'web-vm-${i}'
   location: resourceGroup().location
+  dependsOn: [webNic] // Ensure NICs are deployed first
   properties: {
     hardwareProfile: {
       vmSize: 'Standard_B2s'
@@ -80,7 +81,7 @@ resource webVms 'Microsoft.Compute/virtualMachines@2021-07-01' = [for i in range
     networkProfile: {
       networkInterfaces: [
         {
-          id: resourceId('Microsoft.Network/networkInterfaces', 'web-nic-${i}') // Fixed for Line 63
+          id: resourceId('Microsoft.Network/networkInterfaces', 'web-nic-${i}') // Fixed Line 63
         }
       ]
     }
